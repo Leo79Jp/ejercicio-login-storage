@@ -28,6 +28,100 @@ const baseDeDatos = {
   ],
 };
 
+
+window.addEventListener("load", function(){
+  if (localStorage.getItem("baseDeDatos") == null){
+    // console.log("no existe");
+
+    const boton= document.querySelector(".login-btn")
+    boton.addEventListener('click', (event) => {
+      console.log("Has hecho click en el boton inicio de sesión");
+      let x = 0
+      const mensaje = setInterval(() => {
+          ++x
+          document.querySelector("#loader").style.display="block";
+          document.querySelector("#error-container").style.display="none";
+          if ( x === 3){
+              clearInterval(mensaje)
+              document.querySelector("#loader").style.display="none";
+    
+              function validarEmail(email) { // con esta funcion valido el correo electronico
+                  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                  return regex.test(email);
+                }
+                let emailValido
+                let email = document.getElementById('email-input').value;
+                for (let index = 0; index < baseDeDatos.usuarios.length; index++) {
+                  if (baseDeDatos.usuarios[index].email === email) {
+                    emailValido = baseDeDatos.usuarios[index].email
+                    window.localStorage.setItem('baseDeDatos', JSON.stringify(baseDeDatos.usuarios[index].name))
+                  }
+                }
+    
+                if (validarEmail(emailValido)) {
+                  console.log("El email es válido.");
+                } else {
+                  console.log("El email no es válido.");
+              }
+              
+              validarEmail();
+              
+              function validarPassword(password) {  // con esta funcion valido la contraseña
+                const regexp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+                return regexp.test(password);
+              }
+              
+              let passwordValido
+              let password = document.getElementById('password-input').value;
+              for (let index = 0; index < baseDeDatos.usuarios.length; index++) {
+                if (baseDeDatos.usuarios[index].password === password) {
+                  passwordValido = baseDeDatos.usuarios[index].password
+                }
+              }
+              
+              if (validarPassword(passwordValido)) {
+                console.log("La contraseña es válida.");
+              } else {
+                console.log("La contraseña no es válida.");
+              }
+              validarPassword();
+              
+              if (emailValido && passwordValido){
+                const h1 = document.querySelector('h1')
+                const nombreUsuario = JSON.parse(window.localStorage.getItem('baseDeDatos'))
+                h1.innerText= " Bienvenido al sitio 😀 " + nombreUsuario
+                document.querySelector("form").style.display="none";
+                const main = document.querySelector('main')
+                const botonCS = document.createElement("button");
+                botonCS.setAttribute("class", "login-btn");
+                botonCS.setAttribute("type", "button");
+                botonCS.innerText= "Cerrar Sesión"
+                main.appendChild(botonCS);
+                // Evento para cerrar sesión
+                botonCS.addEventListener('click', () => {
+                  localStorage.removeItem('baseDeDatos');
+                  alert("Se a cerrado la sesión con exito!")
+                  location.reload();
+                })
+                
+            }else{
+                document.querySelector("#error-container").style.display="block";
+                const small = document.querySelector('small')
+                small.innerText= "Alguno de los datos ingresados son incorrectos"
+              }
+    
+    
+              
+            }
+          }, 1000);
+        })
+        
+      }else{
+        console.log("si existe");
+
+      }
+    });
+
 // ACTIVIDAD
 
 // Paso a paso:
