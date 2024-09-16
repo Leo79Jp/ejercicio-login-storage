@@ -28,6 +28,25 @@ const baseDeDatos = {
   ],
 };
 
+function validarSaludo (){ /// Muestro el saludo y creo el boton
+  const h1 = document.querySelector('h1')
+  const nombreUsuario = JSON.parse(window.localStorage.getItem('baseDeDatos'))
+  h1.innerText= " Bienvenido al sitio 😀 " + nombreUsuario
+  document.querySelector("form").style.display="none";
+  const main = document.querySelector('main')
+  const botonCS = document.createElement("button");
+  botonCS.setAttribute("class", "login-btn");
+  botonCS.setAttribute("type", "button");
+  botonCS.innerText= "Cerrar Sesión"
+  main.appendChild(botonCS);
+  // Evento para cerrar sesión
+  botonCS.addEventListener('click', () => {
+    localStorage.removeItem('baseDeDatos');
+    alert("Se a cerrado la sesión con exito!")
+    location.reload();
+  })
+
+}
 
 window.addEventListener("load", function(){
   if (localStorage.getItem("baseDeDatos") == null){
@@ -86,25 +105,10 @@ window.addEventListener("load", function(){
               }
               validarPassword();
               
+              /// Valido si usuario y contraseña son correctas
               if (emailValido && passwordValido){
-                  const h1 = document.querySelector('h1')
-                  const nombreUsuario = JSON.parse(window.localStorage.getItem('baseDeDatos'))
-                  h1.innerText= " Bienvenido al sitio 😀 " + nombreUsuario
-                  document.querySelector("form").style.display="none";
-                  const main = document.querySelector('main')
-                  const botonCS = document.createElement("button");
-                  botonCS.setAttribute("class", "login-btn");
-                  botonCS.setAttribute("type", "button");
-                  botonCS.innerText= "Cerrar Sesión"
-                  main.appendChild(botonCS);
-                  // Evento para cerrar sesión
-                  botonCS.addEventListener('click', () => {
-                    localStorage.removeItem('baseDeDatos');
-                    alert("Se a cerrado la sesión con exito!")
-                    location.reload();
-                  })
-
-            }else{
+                  validarSaludo();
+              }else{
                 document.querySelector("#error-container").style.display="block";
                 const small = document.querySelector('small')
                 small.innerText= "Alguno de los datos ingresados son incorrectos"
@@ -118,23 +122,7 @@ window.addEventListener("load", function(){
         
       }else{
         console.log("si existe");
-        const h1 = document.querySelector('h1')
-        const nombreUsuario = JSON.parse(window.localStorage.getItem('baseDeDatos'))
-        h1.innerText= " Bienvenido al sitio 😀 " + nombreUsuario
-        document.querySelector("form").style.display="none";
-        const main = document.querySelector('main')
-        const botonCS = document.createElement("button");
-        botonCS.setAttribute("class", "login-btn");
-        botonCS.setAttribute("type", "button");
-        botonCS.innerText= "Cerrar Sesión"
-        main.appendChild(botonCS);
-        // Evento para cerrar sesión
-        botonCS.addEventListener('click', () => {
-          localStorage.removeItem('baseDeDatos');
-          alert("Se a cerrado la sesión con exito!")
-          location.reload();
-        })
-
+        validarSaludo();
       }
     });
 
